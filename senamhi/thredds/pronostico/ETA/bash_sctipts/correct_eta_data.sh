@@ -25,9 +25,9 @@ for product in ${products[@]}; do
 
         fi
         for file_prefix in ${file_prefixes[@]}; do
-            path_to_file="${thredds_eta_path}/determinista/${file_name}/${product}/${file_prex}_${date_download}_${product}.nc"
+            path_to_file="${thredds_eta_path}/${product}/determinista/${type_var}/${file_prex}_${date_download}_${product}.nc"
             path_to_ncml="${ncml_eta_path}/${product}/${file_prex}_${date_download}_${product}.ncml"
-            path_to_updated_file="${thredds_eta_path}/determinista/${file_name}/${product}/corrected/${file_prex}_${date_download}_${product}_corrected.nc"
+            path_to_updated_file="${thredds_eta_path}/${product}/determinista/${type_var}/corrected/${file_prex}_${date_download}_${product}_corrected.nc"
             path_to_ncml2="${ncml_eta_path}/${product}/${file_prex}_${date_download}_${product}2.ncml"
 
             # execute the python script correct_ncml_climate_change.py

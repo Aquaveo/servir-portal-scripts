@@ -5,7 +5,7 @@ PASSWORD=serviciosenamhi
 
 products=("eqm" "scal")
 date_download = $(date +%Y%m%d)
-
+eta_base_path=/home/ubuntu/data/thredds/public/ETA22
 for product in ${products[@]}; do
 
     # defining variables
@@ -18,16 +18,16 @@ for product in ${products[@]}; do
     echo "Downloading $product ETA22 data"
 
     echo "Downloading Precip Det"
-    wget --user=$USER --password=$PASSWORD --directory-prefix=/home/ubuntu/data/thredds/public/ETA22/$product/determinista/precipitation $SOURCE_PRECIP_DET    
+    wget --user=$USER --password=$PASSWORD --directory-prefix=${eta_base_path}/$product/determinista/precipitation $SOURCE_PRECIP_DET    
 
     echo "Downloading Temp Det 1"
-    wget --user=$USER --password=$PASSWORD --directory-prefix=/home/ubuntu/data/thredds/public/ETA22/$product/determinista/temperature $SOURCE_TEMP_DET_1
+    wget --user=$USER --password=$PASSWORD --directory-prefix=${eta_base_path}/$product/determinista/temperature $SOURCE_TEMP_DET_1
 
     echo "Downloading Temp Det 2"
-    wget --user=$USER --password=$PASSWORD --directory-prefix=/home/ubuntu/data/thredds/public/ETA22/$product/determinista/temperature $SOURCE_TEMP_DET_2
+    wget --user=$USER --password=$PASSWORD --directory-prefix=${eta_base_path}/$product/determinista/temperature $SOURCE_TEMP_DET_2
 
     echo "Downloading Ensemble"
-    wget --user=$USER --password=$PASSWORD --directory-prefix=/home/ubuntu/data/thredds/public/ETA22/$product/determinista/ensemble $SOURCE_ENS
+    wget --user=$USER --password=$PASSWORD --directory-prefix=${eta_base_path}/$product/determinista/ensemble $SOURCE_ENS
     
     echo "Finishing Data Dowloadig for $product ETA22 data"
 
