@@ -4,36 +4,36 @@ source /home/ubuntu/miniconda3/bin/activate tethys
 
 products=("eqm" "scal")
 date_download=$(date +%Y%m%d)
-type_vars=("precipitation","temperature","ensemble")
+type_vars=("precipitation" "temperature" "ensemble")
 thredds_eta_path='/home/ubuntu/data/thredds/public/ETA22'
 ncml_eta_path='/home/ubuntu/scripts/thredds/ncml_files/ETA22'
+python_script_base_path='/home/ubuntu/scripts/thredds/eta'
 file_prefixes=("pp")
 
 for product in ${products[@]}; do
     for type_var in ${type_vars[@]}; do
-        if [[ "$type_vars" == "precipitation" ]]
+        if [[ "$type_var" == "precipitation" ]]; then
             file_prefixes=("pp")
-        then        
-
-        elif [[ "$type_vars" == "temperature" ]]
-            file_prefixes=("tn","tx")
-        then
-
-        elif [[ "$type_vars" == "ensemble" ]]
+        elif [[ "$type_var" == "temperature" ]]; then
+            file_prefixes=("tn" "tx")
+        elif [[ "$type_var" == "ensemble" ]]; then
             file_prefixes=("ens")
-        then
-
         fi
         for file_prefix in ${file_prefixes[@]}; do
-            path_to_file="${thredds_eta_path}/${product}/determinista/${type_var}/${file_prex}_${date_download}_${product}.nc"
-            path_to_ncml="${ncml_eta_path}/${product}/${file_prex}_${date_download}_${product}.ncml"
-            path_to_updated_file="${thredds_eta_path}/${product}/determinista/${type_var}/corrected/${file_prex}_${date_download}_${product}_corrected.nc"
-            path_to_ncml2="${ncml_eta_path}/${product}/${file_prex}_${date_download}_${product}2.ncml"
+            if [[ "$type_var" == "ensemble" ]]; then
+                file_name="pp_${date_download}_${file_prefix}_${product}"
+            else
+                file_name=${file_prefix}_${date_download}_${product}
+            fi
+            path_to_file="${thredds_eta_path}/${product}/determinista/${type_var}/${file_name}.nc"
+            path_to_ncml="${ncml_eta_path}/${product}/${file_name}.ncml"
+            path_to_updated_file="${thredds_eta_path}/${product}/determinista/${type_var}/corrected/${file_name}_corrected.nc"
+            path_to_ncml2="${ncml_eta_path}/${product}/${file_name}2.ncml"
 
             # execute the python script correct_ncml_climate_change.py
-            python /home/ubuntu/scripts/thredds/eta/correct_ncml_climate_change.py $path_to_file $path_to_ncml
-
             echo "Fixing ${product} ${type_var} ${file_prefix} ETA22 data"
+            python ${python_script_base_path}/correct_ncml_climate_change.py $path_to_file $path_to_ncml
+
 
             sed -i "/'z'/s//'time'/" $path_to_ncml
             sed -i '/"z"/s//"time"/' $path_to_ncml
@@ -44,11 +44,12 @@ for product in ${products[@]}; do
             source /home/ubuntu/miniconda3/bin/activate tethys
 
             # execute the python script generate_climate_change.py
-            python /home/ubuntu/scripts/thredds/eta/generate_climate_change.py $path_to_file $path_to_ncml $path_to_updated_file         
+            python ${python_script_base_path}/generate_climate_change.py $path_to_file $path_to_ncml $path_to_updated_file         
         done
     done
 done
 
+# source /home/ubuntu/miniconda3/bin/activate tethys
 
 # path_to_file_eqm="/home/ubuntu/data/thredds/public/pronostico_precipitacion/ETA22/eqm/pp_$(date +%Y%m%d)_ens_eqm.nc"
 # path_to_ncml_eqm="/home/ubuntu/scripts/thredds/ncml_files/ETA22/eqm/pp_$(date +%Y%m%d)_ens_eqm.ncml"
@@ -104,3 +105,4 @@ done
 # source /home/ubuntu/miniconda3/bin/activate tethys
 
 # python /home/ubuntu/scripts/thredds/eta/generate_climate_change.py $path_to_file_scal $path_to_ncml_scal $path_to_updated_file_scal
+
