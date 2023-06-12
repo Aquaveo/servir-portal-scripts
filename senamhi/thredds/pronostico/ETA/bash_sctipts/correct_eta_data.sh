@@ -22,8 +22,10 @@ for product in ${products[@]}; do
         for file_prefix in ${file_prefixes[@]}; do
             if [[ "$type_var" == "ensemble" ]]; then
                 file_name="pp_${date_download}_${file_prefix}_${product}"
+                lastest_name="latest_pp_${file_prefix}_${product}"
             else
                 file_name=${file_prefix}_${date_download}_${product}
+                lastest_name="latest_${file_prefix}_${product}"
             fi
             path_to_file="${thredds_eta_path}/${product}/determinista/${type_var}/${file_name}.nc"
             path_to_ncml="${ncml_eta_path}/${product}/${file_name}.ncml"
@@ -44,7 +46,10 @@ for product in ${products[@]}; do
             source /home/ubuntu/miniconda3/bin/activate tethys
 
             # execute the python script generate_climate_change.py
-            python ${python_script_base_path}/generate_climate_change.py $path_to_file $path_to_ncml $path_to_updated_file         
+            python ${python_script_base_path}/generate_climate_change.py $path_to_file $path_to_ncml $path_to_updated_file
+
+            #make a copy called latest
+            cp $path_to_updated_file $thredds_eta_path/$product/determinista/$type_var/corrected/${lastest_name}.nc
         done
     done
 done
