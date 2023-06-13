@@ -7,8 +7,6 @@ path_to_file = sys.argv[1]
 path_to_ncml = sys.argv[2]
 
 
-print(path_to_file)
-
 ############## If the ncml file needs to be generated ########################
 
 # Build a dataset object
