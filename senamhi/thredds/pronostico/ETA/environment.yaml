@@ -1,0 +1,10 @@
+name: mde_thredds # Replace with the desired name for your environment
+channels:
+  - conda-forge # Additional channels you want to include
+dependencies:
+  - python=3.10.* # Specify the desired Python version
+  - numpy=1.21.6
+  - udunits2
+  - pip
+  - pip:
+      - cfbuild
